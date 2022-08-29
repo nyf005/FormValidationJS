@@ -10,7 +10,7 @@
   </head>
   <body>
     <div id="content">
-      <form action="">
+      <form id="form" action="" autocomplete="off" novalidate>
         <h4>Form Validation with Javascript</h4>
         <br />
         <hr />
@@ -19,9 +19,8 @@
           <span class="feedback">* required</span>
         </div>
         <div class="form-element">
-          <!-- <input id="country" type="text" placeholder="Country" required /> -->
           <select id="country" name="country" required>
-            <option value="" selected="selected">Select Country</option>
+            <option value="" selected="selected">Select your country</option>
             <option value="Afghanistan">Afghanistan</option>
             <option value="Albania">Albania</option>
             <option value="Algeria">Algeria</option>
@@ -315,7 +314,13 @@
           <span class="feedback">* required</span>
         </div>
         <div class="form-element">
-          <input id="zipcode" type="text" placeholder="Zip Code" required />
+          <input
+            id="zip-code"
+            type="text"
+            placeholder="Zip Code"
+            pattern="(^\d{5}$)"
+            required
+          />
           <span class="feedback">* required</span>
         </div>
         <div class="form-element">
@@ -326,6 +331,13 @@
             required
           />
           <span class="feedback">* required</span>
+          <ul>
+            <li>Should contain at least one digit</li>
+            <li>Should contain at least one lower case</li>
+            <li>Should contain least one upper case</li>
+            <li>Should contain least one special character</li>
+            <li>Should be at least 8 characters long</li>
+          </ul>
         </div>
         <div class="form-element">
           <input
@@ -337,7 +349,10 @@
           <span class="feedback">* required</span>
         </div>
 
-        <button type="submit">Submit</button>
+        <div id="last-row">
+          <button type="submit">Submit</button>
+          <p id="result"></p>
+        </div>
       </form>
     </div>
   </body>

@@ -3,6 +3,9 @@
   padding: 0;
   margin: 0;
 }
+body {
+  font-family: sans-serif;
+}
 
 #content {
   width: 100vw;
@@ -43,6 +46,10 @@ select {
   background-color: transparent;
 }
 
+select {
+  padding: 4px;
+}
+
 input:focus,
 select:focus {
   border-bottom: 1.5px solid #000;
@@ -54,27 +61,53 @@ select:valid {
   border-bottom: 1.5px solid #16a34a;
 }
 
+select:not(:focus):invalid {
+  background-color: transparent;
+  border-bottom: 1.5px solid #ccc;
+  color: #8e8e8e;
+}
+
 input:not(:placeholder-shown):invalid,
 select:invalid {
   background-color: rgba(220, 38, 38, 0.2);
   border-bottom: 1.5px solid #dc2626;
 }
 
-select:not(:focus):invalid {
-  background-color: transparent;
-  border-bottom: 1.5px solid #ccc;
-}
-
 input + span,
 select + span {
-  font-family: sans-serif;
   font-size: small;
   font-weight: 600;
+  color: #dc2626;
 }
 
-input:not(:placeholder-shown):invalid + span,
-select:focus:invalid + span {
+#password:focus ~ ul,
+#password:not(:placeholder-shown):invalid ~ ul {
+  display: block;
+}
+
+ul {
+  display: none;
+  font-size: small;
+  color: #8e8e8e;
+  padding: 8px 24px 0;
+}
+
+li {
+  padding: 2px 0;
+}
+
+.correct {
+  color: #16a34a;
+}
+
+.incorrect {
   color: #dc2626;
+}
+
+#last-row {
+  display: flex;
+  align-items: center;
+  gap: 24px;
 }
 
 button {
