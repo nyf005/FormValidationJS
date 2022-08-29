@@ -162,3 +162,25 @@ password.addEventListener("change", (e) => testPassword(e.target));
 confirmPassword.addEventListener("change", (e) =>
   testConfirmPassword(e.target)
 );
+
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  testConfirmPassword(confirmPassword);
+  testPassword(password);
+  testZipCode(zipCode);
+  testCountry(country);
+  testEmail(email);
+
+  if (form.checkValidity()) {
+    result.classList.remove("incorrect");
+    result.classList.add("correct");
+
+    result.textContent = "Form submitted successfully!";
+  } else {
+    result.classList.remove("correct");
+    result.classList.add("incorrect");
+
+    result.textContent = "Please fill out all the fields";
+  }
+});
