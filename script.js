@@ -21,58 +21,6 @@ function removeFeedback(input) {
   feedback.textContent = "";
 }
 
-function testEmail(input) {
-  input.setCustomValidity("");
-  if (input.validity.typeMismatch) {
-    input.setCustomValidity("Enter a valid email address");
-    setError(input, "Please enter a valid email address");
-  }
-  if (input.validity.valueMissing) {
-    input.setCustomValidity("The email is required");
-    setError(input, "* required");
-  }
-
-  if (input.validity.valid) {
-    removeFeedback(input);
-  }
-
-  input.reportValidity();
-}
-
-function testCountry(input) {
-  input.setCustomValidity("");
-  if (input.validity.valueMissing) {
-    input.setCustomValidity("The country is required");
-    setError(input, "* required");
-  }
-
-  if (input.validity.valid) {
-    removeFeedback(input);
-  }
-
-  input.reportValidity();
-}
-
-function testZipCode(input) {
-  input.setCustomValidity("");
-
-  if (input.validity.valueMissing) {
-    input.setCustomValidity("The Zip Code is required");
-    setError(input, "* required");
-  }
-
-  if (input.validity.patternMismatch) {
-    input.setCustomValidity("The Zip Code is not valid");
-    setError(input, "Should be at least 5 digits long");
-  }
-
-  if (input.validity.valid) {
-    removeFeedback(input);
-  }
-
-  input.reportValidity();
-}
-
 function testPasswordOnInput(input) {
   if (!/(?=.*\d)/.test(input.value)) {
     passwordCriterias[0].classList.remove("correct");
@@ -105,32 +53,80 @@ function testPasswordOnInput(input) {
   }
 }
 
-function testPassword(input) {
+function testInput(input) {
   input.setCustomValidity("");
+  switch (input.id) {
+    case "email":
+      if (input.validity.typeMismatch) {
+        input.setCustomValidity("Enter a valid email address");
+        setError(input, "Please enter a valid email address");
+      }
+      if (input.validity.valueMissing) {
+        input.setCustomValidity("The email is required");
+        setError(input, "* required");
+      }
+      break;
 
-  if (!/(?=.*\d)/.test(input.value)) {
-    input.setCustomValidity("Your password is not secure enough");
-    setError(input, "Should contain at least one digit");
-  }
+    case "country":
+      if (input.validity.valueMissing) {
+        input.setCustomValidity("The country is required");
+        setError(input, "* required");
+      }
+      break;
 
-  if (!/(?=.*[a-z])/.test(input.value)) {
-    input.setCustomValidity("Your password is not secure enough");
-    setError(input, "Should contain at least one lower case");
-  }
+    case "zip-code":
+      if (input.validity.valueMissing) {
+        input.setCustomValidity("The Zip Code is required");
+        setError(input, "* required");
+      }
 
-  if (!/(?=.*[A-Z])/.test(input.value)) {
-    input.setCustomValidity("Your password is not secure enough");
-    setError(input, "Should contain least one upper case");
-  }
+      if (input.validity.patternMismatch) {
+        input.setCustomValidity("The Zip Code is not valid");
+        setError(input, "Should be at least 5 digits long");
+      }
+      break;
 
-  if (!/(?=.*[\W])/.test(input.value)) {
-    input.setCustomValidity("Your password is not secure enough");
-    setError(input, "Should contain least one special character");
-  }
+    case "password":
+      if (!/(?=.*\d)/.test(input.value)) {
+        input.setCustomValidity("Your password is not secure enough");
+        setError(input, "Should contain at least one digit");
+      }
 
-  if (!/.{8,}/.test(input.value)) {
-    input.setCustomValidity("Your password is not secure enough");
-    setError(input, "Should be at least 8 characters long");
+      if (!/(?=.*[a-z])/.test(input.value)) {
+        input.setCustomValidity("Your password is not secure enough");
+        setError(input, "Should contain at least one lower case");
+      }
+
+      if (!/(?=.*[A-Z])/.test(input.value)) {
+        input.setCustomValidity("Your password is not secure enough");
+        setError(input, "Should contain least one upper case");
+      }
+
+      if (!/(?=.*[\W])/.test(input.value)) {
+        input.setCustomValidity("Your password is not secure enough");
+        setError(input, "Should contain least one special character");
+      }
+
+      if (!/.{8,}/.test(input.value)) {
+        input.setCustomValidity("Your password is not secure enough");
+        setError(input, "Should be at least 8 characters long");
+      }
+
+      if (input.validity.valueMissing) {
+        input.setCustomValidity("The password is required");
+        setError(input, "* required");
+      }
+      break;
+
+    case "confirm-password":
+      if (input.value !== password.value) {
+        input.setCustomValidity("Passwords do not match");
+        setError(input, "Passwords do not match");
+      }
+      break;
+
+    default:
+      break;
   }
 
   if (input.validity.valid) {
@@ -140,43 +136,27 @@ function testPassword(input) {
   input.reportValidity();
 }
 
-function testConfirmPassword(input) {
-  input.setCustomValidity("");
-  if (input.value !== password.value) {
-    input.setCustomValidity("Passwords do not match");
-    setError(input, "Passwords do not match");
-  }
-
-  if (input.validity.valid) {
-    removeFeedback(input);
-  }
-
-  input.reportValidity();
-}
-
-email.addEventListener("change", (e) => testEmail(e.target));
-country.addEventListener("change", (e) => testCountry(e.target));
-zipCode.addEventListener("change", (e) => testZipCode(e.target));
+email.addEventListener("change", (e) => testInput(e.target));
+country.addEventListener("change", (e) => testInput(country));
+zipCode.addEventListener("change", (e) => testInput(e.target));
 password.addEventListener("input", (e) => testPasswordOnInput(e.target));
-password.addEventListener("change", (e) => testPassword(e.target));
-confirmPassword.addEventListener("change", (e) =>
-  testConfirmPassword(e.target)
-);
+password.addEventListener("change", (e) => testInput(e.target));
+confirmPassword.addEventListener("change", (e) => testInput(e.target));
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
 
-  testConfirmPassword(confirmPassword);
-  testPassword(password);
-  testZipCode(zipCode);
-  testCountry(country);
-  testEmail(email);
+  testInput(confirmPassword);
+  testInput(password);
+  testInput(zipCode);
+  testInput(country);
+  testInput(email);
 
   if (form.checkValidity()) {
     result.classList.remove("incorrect");
     result.classList.add("correct");
 
-    result.textContent = "Form submitted successfully!";
+    result.textContent = "Form submitted!";
   } else {
     result.classList.remove("correct");
     result.classList.add("incorrect");
